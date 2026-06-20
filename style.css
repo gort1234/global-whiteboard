@@ -1,0 +1,367 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #f4f5f7;
+  --toolbar-bg: #ffffff;
+  --border: #e2e4e9;
+  --text: #1e1e1e;
+  --text-muted: #6b7280;
+  --accent: #4f6df5;
+  --accent-light: #e8edff;
+  --grid-line: #dfe2e8;
+  --canvas-bg: #fbfbfc;
+  --radius: 10px;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 8px 16px;
+  background: var(--toolbar-bg);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  z-index: 20;
+  position: relative;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 14px;
+  border-right: 1px solid var(--border);
+}
+
+.toolbar-group:last-of-type {
+  border-right: none;
+}
+
+.status-group {
+  margin-left: auto;
+  border-right: none;
+  gap: 10px;
+}
+
+.tool-btn, .icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text);
+  font-size: 16px;
+  transition: background .15s, color .15s, border-color .15s;
+}
+
+.icon-btn {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.tool-btn svg, .icon-btn svg {
+  width: 19px;
+  height: 19px;
+  fill: currentColor;
+}
+
+.tool-btn:hover, .icon-btn:hover {
+  background: var(--accent-light);
+}
+
+.tool-btn.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+#colorPicker {
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 8px;
+  padding: 0;
+  cursor: pointer;
+  background: none;
+}
+
+.swatches {
+  display: flex;
+  gap: 6px;
+}
+
+.swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px var(--border);
+  transition: transform .12s;
+}
+
+.swatch:hover {
+  transform: scale(1.15);
+}
+
+.swatch.active {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.size-label {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+#sizeSlider {
+  width: 100px;
+  accent-color: var(--accent);
+}
+
+#sizeValue {
+  font-size: 13px;
+  color: var(--text-muted);
+  width: 22px;
+}
+
+#zoomValue {
+  font-size: 13px;
+  color: var(--text-muted);
+  width: 46px;
+  text-align: center;
+}
+
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.users-pill {
+  background: var(--accent-light);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.online-dot {
+  background: #2ecc71;
+  box-shadow: 0 0 0 2px rgba(46, 204, 113, .25);
+}
+
+/* Workspace */
+.workspace {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+}
+
+.canvas-wrap {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: var(--canvas-bg);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+#board {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+}
+
+.cursors-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.remote-cursor {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transform: translate(-2px, -2px);
+  transition: left .05s linear, top .05s linear;
+  pointer-events: none;
+}
+
+.remote-cursor .dot-cursor {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,.3);
+}
+
+.remote-cursor .label {
+  margin-top: 2px;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* Chat sidebar */
+.chat-sidebar {
+  width: 280px;
+  flex-shrink: 0;
+  background: var(--toolbar-bg);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  transition: width .2s ease, opacity .2s ease;
+}
+
+.chat-sidebar.collapsed {
+  width: 0;
+  opacity: 0;
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.chat-toggle {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text-muted);
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.chat-toggle:hover {
+  background: var(--accent-light);
+}
+
+.chat-placeholder {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  color: var(--text-muted);
+  gap: 6px;
+}
+
+.chat-sub {
+  font-size: 12px;
+  opacity: .8;
+}
+
+/* Floating chat reopen button when collapsed */
+.chat-reopen {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  z-index: 25;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--toolbar-bg);
+  cursor: pointer;
+}
+
+.chat-reopen.visible {
+  display: flex;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .toolbar {
+    gap: 10px;
+    padding: 8px 10px;
+  }
+  .toolbar-group {
+    padding-right: 8px;
+    gap: 6px;
+  }
+  #sizeSlider {
+    width: 70px;
+  }
+  .chat-sidebar {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 30;
+    width: 240px;
+    box-shadow: -4px 0 12px rgba(0,0,0,.08);
+  }
+  .chat-sidebar.collapsed {
+    transform: translateX(100%);
+    width: 240px;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .status-pill span#userCount,
+  .status-pill {
+    font-size: 12px;
+  }
+  .toolbar-group .size-label {
+    display: none;
+  }
+  .toolbar {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
