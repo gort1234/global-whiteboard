@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Collaborative Whiteboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="toolbar">
+    <div class="toolbar-group">
+      <button class="tool-btn active" data-tool="pen" title="Pen">
+        <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+      </button>
+      <button class="tool-btn" data-tool="eraser" title="Eraser">
+        <svg viewBox="0 0 24 24"><path d="M16.24 3.56l4.95 4.94c.78.79.78 2.05 0 2.84L12 20.53a4.008 4.008 0 0 1-5.66 0L2.81 17c-.78-.79-.78-2.05 0-2.84l10.6-10.6c.79-.78 2.05-.78 2.83 0M4.22 15.58l3.54 3.54c.78.79 2.04.79 2.83 0l3.53-3.53-4.95-4.95-4.95 4.94z"/></svg>
+      </button>
+      <button class="tool-btn" data-tool="pan" title="Pan">
+        <svg viewBox="0 0 24 24"><path d="M23 5.5V20a2 2 0 0 1-2 2H10.71a2 2 0 0 1-1.41-.59L1.91 14a1 1 0 0 1 1.06-1.66l.05.03L7 14.5V4a1.5 1.5 0 0 1 3 0v6h1V1.5a1.5 1.5 0 0 1 3 0V10h1V2.5a1.5 1.5 0 0 1 3 0V10h1V5.5a1.5 1.5 0 0 1 3 0z"/></svg>
+      </button>
+    </div>
+
+    <div class="toolbar-group">
+      <input type="color" id="colorPicker" value="#1e1e1e" title="Color">
+      <div class="swatches" id="swatches"></div>
+    </div>
+
+    <div class="toolbar-group">
+      <label class="size-label" for="sizeSlider">Size</label>
+      <input type="range" id="sizeSlider" min="1" max="50" value="4">
+      <span id="sizeValue">4</span>
+    </div>
+
+    <div class="toolbar-group">
+      <button class="icon-btn" id="undoBtn" title="Undo (your strokes only)">
+        <svg viewBox="0 0 24 24"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></svg>
+      </button>
+      <button class="icon-btn" id="redoBtn" title="Redo">
+        <svg viewBox="0 0 24 24"><path d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.91 16c1.05-3.19 4.06-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7z"/></svg>
+      </button>
+    </div>
+
+    <div class="toolbar-group">
+      <button class="icon-btn" id="zoomOutBtn" title="Zoom out">−</button>
+      <span id="zoomValue">100%</span>
+      <button class="icon-btn" id="zoomInBtn" title="Zoom in">+</button>
+      <button class="icon-btn" id="resetViewBtn" title="Reset view">⤾</button>
+    </div>
+
+    <div class="toolbar-group status-group">
+      <div class="status-pill" id="toolIndicator">Pen</div>
+      <button class="status-pill users-pill" id="usersToggle" title="Online users">
+        <span class="dot online-dot"></span>
+        <span id="userCount">1</span> online
+      </button>
+      <button class="icon-btn" id="settingsBtn" title="Change username">
+        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.61-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.5.5 0 0 0-.61.22L1.74 8.84a.5.5 0 0 0 .12.64l2.03 1.58c-.05.3-.09.62-.09.94s.02.64.07.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32c.14.24.4.32.61.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.26.42.5.42h3.84c.24 0 .45-.18.5-.42l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.24.1.5 0 .61-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <section class="canvas-wrap" id="canvasWrap">
+      <canvas id="board"></canvas>
+      <div class="cursors-layer" id="cursorsLayer"></div>
+    </section>
+
+    <aside class="users-panel collapsed" id="usersPanel">
+      <div class="users-panel-header">
+        <span>Online Users</span>
+        <button class="chat-toggle" id="usersPanelClose">✕</button>
+      </div>
+      <ul class="users-list" id="usersList"></ul>
+    </aside>
+
+    <aside class="chat-sidebar" id="chatSidebar">
+      <div class="chat-header">
+        <span>Chat</span>
+        <button class="chat-toggle" id="chatToggle" title="Toggle chat">⮞</button>
+      </div>
+      <div class="chat-placeholder">
+        <p>Chat integration coming soon.</p>
+        <p class="chat-sub">This panel is reserved for the existing global chat system.</p>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<div class="modal-overlay" id="usernameModalOverlay">
+  <div class="modal">
+    <h2>Choose a username</h2>
+    <p class="modal-sub">This is how others will see you on the board.</p>
+    <input type="text" id="usernameInput" maxlength="20" placeholder="Enter your name">
+    <button class="modal-btn" id="usernameSubmit">Continue</button>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
